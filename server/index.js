@@ -25,21 +25,19 @@ app.get("/", async (req, res) => {
     urls.push(host + $(this).attr("href"));
   });
 
-  for (let i = 0; i < urls.length; i++) {
-    let notice;
-    if (i === 0) {
-      notice = {
-        notice: datesAndNotice[i + 1],
-        date: datesAndNotice[i],
-        url: urls[i],
-      };
-    } else {
-      notice = {
-        notice: datesAndNotice[2 * i - 1],
-        date: datesAndNotice[2 * i],
-        url: urls[i],
-      };
-    }
+  let i = 0,
+    j = 1,
+    counter = 0;
+
+  while (counter < links.length) {
+    const notice = {};
+
+    notice["notice"] = datesAndNotice[i];
+    notice["date"] = datesAndNotice[j];
+    notice["url"] = links[counter];
+
+    (i += 2), (j += 2), counter++;
+
     allNotice.push(notice);
   }
 
