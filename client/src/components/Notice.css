@@ -1,0 +1,26 @@
+.card {
+  cursor: pointer;
+  display: flex;
+  width: 70%;
+  margin: auto;
+  justify-content: space-between;
+  color: black;
+  text-decoration: none;
+  align-items: center;
+  border: 1px solid gainsboro;
+  padding: 0 1.5rem;
+}
+
+.notice {
+  font-size: 1.1rem;
+}
+
+.date {
+  font-size: 0.9rem;
+}
+
+.new {
+  background-color: red;
+  color: white;
+  padding: 0 10px;
+}
