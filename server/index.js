@@ -1,49 +1,36 @@
 const express = require("express");
-const cheerio = require("cheerio");
-const axios = require("axios");
 const cors = require("cors");
-
-const host = "https://www.cet.edu.in/";
-const url = "https://www.cet.edu.in/notice.php";
+const cron = require("node-cron");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 
-let datesAndNotice = [];
-let urls = [];
-let allNotice = [];
+const connectDB = require("./utils/connectDB");
 
-app.get("/", async (req, res) => {
-  const { data } = await axios.get(url);
-  const $ = cheerio.load(data);
+const noticeRoutes = require("./routes/noticeRoutes");
+const checkNotice = require("./utils/checkNotice");
 
-  $("td[width=98%] div[class='gentxt'] b").each(function () {
-    datesAndNotice.push($(this).text());
-  });
+app.use("/api/notice", noticeRoutes);
 
-  $("td[width=98%] div[class='gentxt'] a").each(function () {
-    urls.push(host + $(this).attr("href"));
-  });
+cron.schedule("0 23 * * *", () => {
+  // running every 23 hours to check if any new notice has arrived
+  checkNotice();
+});
 
-  let i = 0,
-    j = 1,
-    counter = 0;
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI).then(() => console.log(`DB Connected`));
+    app.listen(4000, () => {
+      console.log("http://localhost:4000");
+    });
 
-  while (counter < urls.length) {
-    const notice = {};
-
-    notice["notice"] = datesAndNotice[i];
-    notice["date"] = datesAndNotice[j];
-    notice["url"] = urls[counter];
-
-    (i += 2), (j += 2), counter++;
-
-    allNotice.push(notice);
+    // run first on server start to store all the notices on the page
+    checkNotice();
+  } catch (err) {
+    console.log(err);
+    process.exit(1);
   }
+};
 
-  res.send({ allNotice });
-});
-
-app.listen(4000, () => {
-  console.log("http://localhost:4000");
-});
+start();
