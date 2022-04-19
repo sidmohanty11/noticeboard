@@ -29,12 +29,12 @@ app.get("/", async (req, res) => {
     j = 1,
     counter = 0;
 
-  while (counter < links.length) {
+  while (counter < urls.length) {
     const notice = {};
 
     notice["notice"] = datesAndNotice[i];
     notice["date"] = datesAndNotice[j];
-    notice["url"] = links[counter];
+    notice["url"] = urls[counter];
 
     (i += 2), (j += 2), counter++;
 
