@@ -29,8 +29,8 @@ const checkNotice = async () => {
     while (counter < urls.length) {
       const notice = {};
 
-      notice["notice"] = datesAndNotice[i];
-      notice["date"] = datesAndNotice[j];
+      notice["notice"] = datesAndNotice[j];
+      notice["date"] = datesAndNotice[i];
       notice["url"] = urls[counter];
 
       (i += 2), (j += 2), counter++;
@@ -43,7 +43,8 @@ const checkNotice = async () => {
 
       const _notice = await Notice.findOne({ url });
 
-      if (_notice) await Notice.findByIdAndUpdate(_notice._id, { isNewNotice: false });
+      if (_notice)
+        await Notice.findByIdAndUpdate(_notice._id, { isNewNotice: false });
       else {
         await Notice.create({
           notice: notice,

@@ -6,14 +6,14 @@ function App() {
 
   useEffect(() => {
     async function getNotice() {
-      const data = await fetch("http://localhost:4000/", {
+      const data = await fetch("http://localhost:4000/api/notice/all", {
         headers: {
           "Content-Type": "application/json",
         },
         method: "GET",
       });
-      const { allNotice } = await data.json();
-      setAllNotice(allNotice);
+      const noticeData = await data.json();
+      setAllNotice(noticeData.data);
     }
     getNotice();
   }, []);
