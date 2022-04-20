@@ -11,6 +11,10 @@ const connectDB = require("./utils/connectDB");
 const noticeRoutes = require("./routes/noticeRoutes");
 const checkNotice = require("./utils/checkNotice");
 
+app.get("/", (req, res) => {
+  res.send({ status: "ok" });
+});
+
 app.use("/api/notice", noticeRoutes);
 
 cron.schedule("0 23 * * *", () => {
@@ -20,7 +24,9 @@ cron.schedule("0 23 * * *", () => {
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI).then(() => console.log(`DB Connected`));
+    await connectDB(process.env.MONGO_URI).then(() =>
+      console.log(`DB Connected`)
+    );
     app.listen(4000, () => {
       console.log("http://localhost:4000");
     });
