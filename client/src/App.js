@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Notice from "./components/Notice";
+import { subscribeUser } from "./subscription";
 
 function App() {
   const [allNotice, setAllNotice] = useState([]);
@@ -14,6 +15,9 @@ function App() {
       });
       const noticeData = await data.json();
       setAllNotice(noticeData.data);
+      if (noticeData.data.find((notice) => notice.isNewNotice === true)) {
+        subscribeUser();
+      }
     }
     getNotice();
   }, []);
@@ -21,6 +25,7 @@ function App() {
   return (
     <div>
       <h1>NoticeBoard OUTR</h1>
+      {/* <button onClick={subscribeUser}>subscribe</button> */}
       {allNotice.map((data) => (
         <Notice
           key={Math.random()}
